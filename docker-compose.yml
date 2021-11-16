@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        ports:
+            - 8081:80
+        links:
+            -   fpm
+        volumes:
+            - ./:/var/www/Olibrary
+    fpm:
+        build:
+            context: .
+            dockerfile: docker/fpm/Dockerfile
+        volumes:
+            - ./:/var/www/Olibrary
+        links:
+            -   mysql
+    mysql:
+        image: mysql:5.7
+        ports:
+            -   33061:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=
+            - MYSQL_DATABASE=
