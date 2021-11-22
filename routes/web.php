@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', '\App\Http\Controllers\MainController@index')->name('home');
+Route::get('/books', '\App\Http\Controllers\BookController@index')->name('books');
+Route::post('/books', '\App\Http\Controllers\BookController@index')->name('books');
+Route::get('/categories', '\App\Http\Controllers\CategoryController@index')->name('categories');
