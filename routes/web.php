@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', '\App\Http\Controllers\MainController@index')->name('home');
-Route::get('/books', '\App\Http\Controllers\BookController@index')->name('books');
-Route::post('/books', '\App\Http\Controllers\BookController@index')->name('books');
 Route::get('/categories', '\App\Http\Controllers\CategoryController@index')->name('categories');
+Route::name('books.')->group(function() {
+    Route::get('/books', '\App\Http\Controllers\BookController@index')->name('books');
+    Route::get('/book/{id}', '\App\Http\Controllers\BookController@show')->name('show');
+});
 Route::name('auth.')->group(function() {
     Route::get('/login', '\App\Http\Controllers\LoginController@index')->name('login');
     Route::post('/login', '\App\Http\Controllers\LoginController@login');
@@ -27,3 +29,4 @@ Route::name('auth.')->group(function() {
     )->name('registration');
     Route::post('/registration', '\App\Http\Controllers\RegistrationController@save');
 });
+
