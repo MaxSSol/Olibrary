@@ -1,3 +1,4 @@
+@inject('auth','\Illuminate\Support\Facades\Auth')
 <header
     class="
                     d-flex
@@ -35,9 +36,22 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" href="#">
-                Sign in
+            @if($auth::check())
+                <a class="nav-link text-dark" href="{{route('auth.login')}}">
+                    {{$auth::user()->name}}
+                </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="{{route('auth.logout')}}">
+                Logout
             </a>
         </li>
+            @else
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="{{route('auth.login')}}">
+                        Sign in
+                    </a>
+                </li>
+            @endif
     </ul>
 </header>
