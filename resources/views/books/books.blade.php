@@ -27,7 +27,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{$book->title}}</h5>
                             <p class="card-text">{{$book->path_file}}</p>
-                            <a href="#" class="btn btn-primary">View</a>
+                            <a href="{{route('books.show', ['id' => $book->id])}}" class="btn btn-primary">View</a>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                 }
                 let sort = $(this).data('sort')
                 $.ajax({
-                    url: "{{route('books')}}",
+                    url: "{{route('books.books')}}",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -69,7 +69,7 @@
             $('.sort-search').change(function () {
                 let sort = $(this).val()
                 $.ajax({
-                    url: "{{route('books')}}",
+                    url: "{{route('books.books')}}",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },

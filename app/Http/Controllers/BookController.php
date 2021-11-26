@@ -16,4 +16,11 @@ class BookController extends Controller
         }
         return view('books.books', ['books' => $books]);
     }
+
+    public function show($id)
+    {
+        $book = Books::findOrFail($id);
+
+        return view('books.show', ['book' => $book]);
+    }
 }

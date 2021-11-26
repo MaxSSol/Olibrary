@@ -17,8 +17,8 @@
                 A champion of America’s great writers and timeless works, Library of America guides readers in finding and exploring the exceptional writing that reflects the nation’s history and culture.
             </p>
             <div class="access pt-4">
-                <a class="btn btn-primary me-3" href="{{route('books')}}">Check books</a>
-                <a class="btn btn-primary" href="{{route('books')}}">Share books</a>
+                <a class="btn btn-primary me-3" href="{{route('books.books')}}">Check books</a>
+                <a class="btn btn-primary" href="{{route('books.books')}}">Share books</a>
             </div>
         </div>
     </main>
