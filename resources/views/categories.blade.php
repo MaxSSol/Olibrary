@@ -14,7 +14,7 @@
                             <div class="card-body text-center">
                                 <h5 class="card-title">{{$category->title}}</h5>
                                 <p class="card-text">{{$category->description}}</p>
-                                <a href="{{route('books', ['categoryId' => $category->id])}}" class="btn btn-primary">View</a>
+                                <a href="{{route('books.books', ['categoryId' => $category->id])}}" class="btn btn-primary">View</a>
                             </div>
                         </div>
                     </div>
