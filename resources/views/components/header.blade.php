@@ -37,7 +37,7 @@
         </li>
         <li class="nav-item">
             @if($auth::check())
-                <a class="nav-link text-dark" href="{{route('auth.login')}}">
+                <a class="nav-link text-dark" href="{{route('auth.account')}}">
                     {{$auth::user()->name}}
                 </a>
         </li>
