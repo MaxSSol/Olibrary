@@ -19,7 +19,7 @@
         <div class="alert alert-danger">{{$message}}</div>
         @enderror
         <div class="form-floating mb-2">
-            <input type="email" class="form-control" id="floatingEmail" placeholder="info@olibrary.com" name="email">
+            <input type="email" class="form-control" id="floatingEmail" placeholder="info@olibrary.com/infologin" name="email">
             <label for="floatingEmail">Email address</label>
         </div>
         <div class="form-floating mb-2">

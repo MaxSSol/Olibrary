@@ -28,5 +28,6 @@ Route::name('auth.')->group(function() {
         '\App\Http\Controllers\RegistrationController@index'
     )->name('registration');
     Route::post('/registration', '\App\Http\Controllers\RegistrationController@save');
+    Route::get('/account', '\App\Http\Controllers\AccountController@index')->middleware('auth')->name('account');
 });
 

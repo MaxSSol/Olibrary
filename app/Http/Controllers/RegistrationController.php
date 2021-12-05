@@ -12,7 +12,7 @@ class RegistrationController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            return redirect(route('home'));
+            return redirect(route('auth.account'));
         }
         return view('authentication.registration');
     }
@@ -34,7 +34,7 @@ class RegistrationController extends Controller
 
         if ($user) {
             Auth::login($user);
-            return redirect(route('home'));
+            return redirect(route('auth.account'));
         }
         return redirect(route('auth.registration'))->withErrors($validated)->withInput();
     }
