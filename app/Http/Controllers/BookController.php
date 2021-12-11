@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Filters\BookFilter;
 use App\Models\Books;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -20,7 +21,9 @@ class BookController extends Controller
     public function show($id)
     {
         $book = Books::findOrFail($id);
-
-        return view('books.show', ['book' => $book]);
+        $favorite = \request()->user()->favorites()->where(function (Builder $query) use ($id) {
+            return $query->where('book_id', $id);
+        })->exists();
+        return view('books.show', ['book' => $book, 'favorite' => $favorite]);
     }
 }
