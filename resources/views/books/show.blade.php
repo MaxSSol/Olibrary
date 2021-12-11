@@ -13,6 +13,14 @@
                 </button>
             </div>
             <div class="share-buttons">
+                <button class="btn fw-bold btn-favorite" style="{{$favorite ? '' : 'display:none'}}" data-book="{{$book->id}}">
+                    Favorite
+                    <img class="favorite-icon" src="https://img.icons8.com/external-prettycons-solid-prettycons/20/000000/external-favorite-essentials-prettycons-solid-prettycons.png"/>
+                </button>
+                <button class="btn fw-bold btn-add-to-favorite" data-book="{{$book->id}}" style="{{$favorite ? 'display:none' : ''}}">
+                    Favorite
+                    <img class="favorite-icon" src="https://img.icons8.com/external-prettycons-lineal-prettycons/20/000000/external-favorite-essentials-prettycons-lineal-prettycons.png"/>
+                </button>
                 <button class="btn fw-bold">
                     Print
                     <img src="https://img.icons8.com/ios-filled/20/000000/print.png"/>
@@ -39,4 +47,49 @@
     </main>
     <x-footer/>
 @endsection
-
+@push('scripts')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@endpush
+@section('scripts')
+    <script>
+        $(document).ready(function () {
+            $('.btn-add-to-favorite').click(function () {
+                let book = $(this).data('book');
+                $.ajax({
+                    url: "{{route('books.favorite')}}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "GET",
+                    data: {
+                        book: book,
+                    },
+                    success: (data) => {
+                        console.log(2)
+                        $('.btn-add-to-favorite').hide()
+                        $('.btn-favorite').show()
+                        $('.favorite-icon').attr('src','https://img.icons8.com/external-prettycons-solid-prettycons/20/000000/external-favorite-essentials-prettycons-solid-prettycons.png')
+                    },
+                })
+            })
+            $('.btn-favorite').click(function () {
+                let book = $(this).data('book');
+                $.ajax({
+                    url: "{{route('books.remove.favorite')}}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "GET",
+                    data: {
+                        book: book,
+                    },
+                    success: (data) => {
+                        $('.btn-add-to-favorite').show()
+                        $('.btn-favorite').hide()
+                        $('.favorite-icon').attr('src','https://img.icons8.com/external-prettycons-lineal-prettycons/20/000000/external-favorite-essentials-prettycons-lineal-prettycons.png')
+                    },
+                })
+            })
+        })
+    </script>
+@endsection
