@@ -47,4 +47,14 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($password);
     }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(
+            Books::class,
+            'favorites',
+            'user_id',
+            'book_id'
+        );
+    }
 }
