@@ -30,6 +30,17 @@ Route::name('auth.')->group(function() {
         '\App\Http\Controllers\RegistrationController@index'
     )->name('registration');
     Route::post('/registration', '\App\Http\Controllers\RegistrationController@save');
-    Route::get('/account', '\App\Http\Controllers\AccountController@index')->middleware('auth')->name('account');
+});
+Route::middleware('auth')->name('account.')->group(function () {
+    Route::get('/account', '\App\Http\Controllers\AccountController@index')->name('account');
+    Route::get(
+        '/account/settings',
+        '\App\Http\Controllers\AccountController@changeCredentials'
+    )->name('settings');
+    Route::post(
+        '/account/settings',
+        '\App\Http\Controllers\AccountController@changeCredentials'
+    );
+
 });
 
