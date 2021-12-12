@@ -15,10 +15,10 @@
                 <p class="fw-normal"><img src="https://img.icons8.com/ios-filled/20/000000/clock--v2.png"/> Joined: {{$user->created_at}}</p>
             </div>
             <div class="profile-information-change">
-                <button class="btn btn-primary">
+                <a class="btn btn-primary" href="{{route('account.settings')}}">
                     <img src="https://img.icons8.com/external-flatart-icons-outline-flatarticons/24/000000/external-setting-basic-ui-elements-flatart-icons-outline-flatarticons.png"/>
                     Change
-                </button>
+                </a>
             </div>
         </section>
         <section class="profile-activity mt-5">
