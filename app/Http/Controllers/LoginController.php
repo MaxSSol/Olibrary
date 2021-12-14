@@ -10,7 +10,7 @@ class LoginController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            return redirect(route('auth.account'));
+            return redirect(route('account.account'));
         }
 
         return view('authentication.login');
@@ -22,7 +22,7 @@ class LoginController extends Controller
         $remember = $request->post('remember');
 
         if (Auth::attempt($validate, $remember)) {
-            return redirect(route('auth.account'));
+            return redirect(route('account.account'));
         }
 
         return redirect(route('auth.login'))->withErrors([

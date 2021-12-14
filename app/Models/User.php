@@ -57,4 +57,14 @@ class User extends Authenticatable
             'book_id'
         );
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(
+            Role::class,
+            'users_roles',
+            'user_id',
+            'role_id'
+        );
+    }
 }
