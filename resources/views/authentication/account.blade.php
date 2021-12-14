@@ -66,7 +66,28 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">.333</div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <table class="table">
+                        <tbody class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Author</th>
+                            </tr>
+                            </thead>
+                            @foreach($user->favorites as $favorite)
+                                    <tr>
+                                        <th scope="row">{{$loop->iteration}}</th>
+                                        <td>{{$favorite->title}}</td>
+                                        @foreach($favorite->authors as $author)
+                                        <td>{{$author->first_name . ' ' . $author->last_name}}</td>
+                                        @endforeach
+                                    </tr>
+                            @endforeach
+                        </tbody>
+                        </table>
+                    </div>
                     <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">..3333.</div>
                 </div>
             </div>
