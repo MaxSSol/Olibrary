@@ -13,26 +13,42 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', '\App\Http\Controllers\MainController@index')->name('home');
-Route::get('/categories', '\App\Http\Controllers\CategoryController@index')->name('categories');
+Route::get('/', '\App\Http\Controllers\MainController@index')
+    ->name('home');
+
+Route::get('/categories', '\App\Http\Controllers\CategoryController@index')
+    ->name('categories');
+
 Route::name('books.')->group(function() {
-    Route::get('/books', '\App\Http\Controllers\BookController@index')->name('books');
-    Route::get('/book/{id}', '\App\Http\Controllers\BookController@show')->name('show')->middleware('auth');
-    Route::get('/favorite', '\App\Http\Controllers\FavoriteController@addToFavorite')->name('favorite')->middleware('auth');
-    Route::get('/remove-favorite', '\App\Http\Controllers\FavoriteController@removeFromFavorite')->name('remove.favorite')->middleware('auth');
+    Route::get('/books', '\App\Http\Controllers\BookController@index')
+        ->name('books');
+    Route::get('/book/{id}', '\App\Http\Controllers\BookController@show')
+        ->name('show')
+        ->middleware('auth');
+    Route::get('/favorite', '\App\Http\Controllers\FavoriteController@addToFavorite')
+        ->name('favorite')
+        ->middleware('auth');
+    Route::get('/remove-favorite', '\App\Http\Controllers\FavoriteController@removeFromFavorite')
+        ->name('remove.favorite')
+        ->middleware('auth');
 });
+
 Route::name('auth.')->group(function() {
-    Route::get('/login', '\App\Http\Controllers\LoginController@index')->name('login');
+    Route::get('/login', '\App\Http\Controllers\LoginController@index')
+        ->name('login');
     Route::post('/login', '\App\Http\Controllers\LoginController@login');
-    Route::get('/logout', '\App\Http\Controllers\LoginController@logout')->name('logout');
+    Route::get('/logout', '\App\Http\Controllers\LoginController@logout')
+        ->name('logout');
     Route::get(
         '/registration',
         '\App\Http\Controllers\RegistrationController@index'
     )->name('registration');
     Route::post('/registration', '\App\Http\Controllers\RegistrationController@save');
 });
+
 Route::middleware('auth')->name('account.')->group(function () {
-    Route::get('/account', '\App\Http\Controllers\AccountController@index')->name('account');
+    Route::get('/account', '\App\Http\Controllers\AccountController@index')
+        ->name('account');
     Route::get(
         '/account/settings',
         '\App\Http\Controllers\AccountController@changeCredentials'
@@ -41,6 +57,17 @@ Route::middleware('auth')->name('account.')->group(function () {
         '/account/settings',
         '\App\Http\Controllers\AccountController@changeCredentials'
     );
+});
 
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+   Route::get('/dashboard', '\App\Http\Controllers\DashboardController@index')
+       ->can('dashboard')
+       ->name('dashboard');
+   Route::post('/user/update', '\App\Http\Controllers\UserController@update')
+       ->name('user.update');
+   Route::get('/user/ban', '\App\Http\Controllers\UserController@ban')
+       ->name('user.ban');
+   Route::get('/user/unban', '\App\Http\Controllers\UserController@unban')
+       ->name('user.unban');
 });
 
