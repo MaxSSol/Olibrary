@@ -67,4 +67,14 @@ class User extends Authenticatable
             'role_id'
         );
     }
+
+    public function isAdmin()
+    {
+        return $this->roles()->where('slug', 'admin')->exists();
+    }
+
+    public function isModer()
+    {
+        return $this->roles()->where('slug', 'moder')->exists();
+    }
 }
