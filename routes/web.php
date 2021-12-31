@@ -63,11 +63,40 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
    Route::get('/dashboard', '\App\Http\Controllers\DashboardController@index')
        ->can('dashboard')
        ->name('dashboard');
+
+   //user
+
    Route::post('/user/update', '\App\Http\Controllers\UserController@update')
        ->name('user.update');
    Route::get('/user/ban', '\App\Http\Controllers\UserController@ban')
        ->name('user.ban');
    Route::get('/user/unban', '\App\Http\Controllers\UserController@unban')
        ->name('user.unban');
+
+   //books
+
+   Route::get('/book/create', '\App\Http\Controllers\BookController@create')
+       ->name('book.create');
+   Route::post('/book/create', '\App\Http\Controllers\BookController@store')
+       ->name('book.store');
+   Route::get('/book/update/{id}', '\App\Http\Controllers\BookController@edit')
+       ->name('book.edit');
+   Route::post('/book/update/{id}', '\App\Http\Controllers\BookController@update')
+       ->name('book.update');
+   Route::post('/book/delete', '\App\Http\Controllers\BookController@destroy')
+       ->name('book.delete');
+
+   //authors
+
+   Route::get('/author/create', '\App\Http\Controllers\AuthorController@create')
+       ->name('author.create');
+   Route::post('/author/create', '\App\Http\Controllers\AuthorController@store')
+       ->name('author.store');
+   Route::get('/author/update/{id}', '\App\Http\Controllers\AuthorController@edit')
+       ->name('author.edit');
+   Route::post('/author/update/{id}', '\App\Http\Controllers\AuthorController@update')
+       ->name('author.update');
+   Route::get('/author/delete/{id}', '\App\Http\Controllers\AuthorController@delete')
+       ->name('author.delete');
 });
 
