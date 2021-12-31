@@ -6,18 +6,26 @@ use App\Filters\QueryFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Books extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
+    protected $fillable = [
+        'title',
+        'description',
+        'path_file'
+    ];
 
     public function authors()
     {
         return $this->belongsToMany(
-            Authors::class,
+            Author::class,
             'author_book',
-            'author_id',
-            'book_id'
+            'book_id',
+            'author_id'
         );
     }
     public function categories()
