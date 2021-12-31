@@ -22,7 +22,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Updated</th>
+                            <th scope="col">Created</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
@@ -32,7 +32,7 @@
                                 <th scope="row">{{$loop->iteration}}</th>
                                 <td>{{$user->name}}</td>
                                 <td>{{$user->email}}</td>
-                                <td>{{$user->updated_at}}</td>
+                                <td>{{$user->created_at}}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary modal-t" data-bs-toggle="modal" data-bs-target="#u{{$user->id}}">
                                         <img src="https://img.icons8.com/fluency-systems-filled/20/000000/life-cycle-female.png"/>
@@ -60,29 +60,30 @@
                 @endcan
                 <div class="tab-pane fade" id="nav-books" role="tabpanel" aria-labelledby="nav-books-tab">
                     <table class="table text-center">
+                        <div class="book-create text-end mt-2">
+                            <a class="btn btn-primary" href="{{route('admin.book.create')}}">
+                                Add a book
+                            </a>
+                        </div>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Title</th>
-                            <th scope="col">Authors</th>
                             <th scope="col">Description</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($books as $book)
-                            <tr>
+                            <tr class="book" data-target="{{$book->id}}">
                                 <th scope="row">{{$loop->iteration}}</th>
                                 <td>{{$book->title}}</td>
-                                @foreach($book->authors as $author)
-                                    <td>{{$author->first_name . ' ' . $author->last_name}}</td>
-                                @endforeach
                                 <td class="text-start">{{$book->description}}</td>
                                 <td class="d-flex">
-                                    <button class="btn btn-primary me-2">
+                                    <a type="button" class="btn btn-primary me-2" href="{{route('admin.book.edit', $book)}}">
                                         <img src="https://img.icons8.com/ios-filled/20/000000/update-left-rotation.png"/>
-                                    </button>
-                                    <button class="btn btn-danger">
+                                    </a>
+                                    <button class="btn btn-danger book-delete" data-book="{{$book->id}}">
                                         <img src="https://img.icons8.com/material/20/000000/filled-trash.png"/>
                                     </button>
                                 </td>
@@ -92,6 +93,11 @@
                     </table>
                 </div>
                 <div class="tab-pane fade" id="nav-authors" role="tabpanel" aria-labelledby="nav-authors-tab">
+                    <div class="book-create text-end mt-2">
+                        <a class="btn btn-primary" href="{{route('admin.author.create')}}">
+                            Add a author
+                        </a>
+                    </div>
                     <table class="table text-center">
                         <thead>
                         <tr>
@@ -110,12 +116,12 @@
                                 <td>{{$author->last_name}}</td>
                                 <td>{{$author->books()->count()}}</td>
                                 <td>
-                                    <button class="btn btn-primary">
+                                    <a class="btn btn-primary" href="{{route('admin.author.edit', $author)}}">
                                         <img src="https://img.icons8.com/ios-filled/20/000000/update-left-rotation.png"/>
-                                    </button>
-                                    <button class="btn btn-danger">
+                                    </a>
+                                    <a class="btn btn-danger" href="{{route('admin.author.delete', $author)}}">
                                         <img src="https://img.icons8.com/material/20/000000/filled-trash.png"/>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -127,13 +133,27 @@
     </section>
 @endsection
 
-@push('scripts')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-@endpush
-@section('scripts')
+
+@section('body-scripts')
     <script>
         $(document).ready(function () {
-            $('.save-changes').click(function () {
+            $('.book-delete').on('click', function () {
+                let id = $(this).data('book');
+                $.ajax({
+                    url: "{{route('admin.book.delete')}}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    data: {
+                        id: id,
+                    },
+                    success: (data) => {
+                        $('#nav-books').html(data)
+                    },
+                })
+            })
+            $('.save-user').click(function () {
                 let target = $(this).data('save-button');
                 let id = $('.user-id[data-id="'+ target + '"]').data('id')
                 let name = $('.name[data-name="'+ target + '"]').val() === '' ? $('.name[data-name="'+ target + '"]').attr('placeholder') : $('.name[data-name="'+ target + '"]').val();

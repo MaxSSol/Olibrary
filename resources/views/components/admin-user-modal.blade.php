@@ -41,7 +41,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary save-changes" data-save-button="{{$user->id}}">Save changes</button>
+                <button class="btn btn-primary save-user" data-save-button="{{$user->id}}">Save changes</button>
             </div>
         </div>
     </div>
