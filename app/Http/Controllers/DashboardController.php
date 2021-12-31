@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Authors;
+use App\Models\Author;
 use App\Models\Books;
 use App\Models\Role;
 use App\Models\User;
@@ -14,7 +14,7 @@ class DashboardController extends Controller
     {
         $users = User::whereNotIn('id', [$request->user()->id])->get();
         $books = Books::with(['authors'])->get();
-        $authors = Authors::all();
+        $authors = Author::all();
         $roles = Role::all();
         return view('admin.dashboard', compact('users', 'books', 'authors', 'roles'));
     }
