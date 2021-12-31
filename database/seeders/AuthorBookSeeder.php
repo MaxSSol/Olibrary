@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Authors;
+use App\Models\Author;
 use App\Models\Books;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +16,7 @@ class AuthorBookSeeder extends Seeder
     public function run()
     {
         $books = Books::all();
-        $authors = Authors::all();
+        $authors = Author::all();
         $authors->each(function ($author) use ($books) {
             $author->books()->attach(
                 $books->random(1)->pluck('id')
