@@ -34,14 +34,9 @@
                                 <td>{{$user->email}}</td>
                                 <td>{{$user->created_at}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary modal-t" data-bs-toggle="modal" data-bs-target="#u{{$user->id}}">
+                                    <a type="button" class="btn btn-primary" href="{{route('admin.user.edit', $user)}}">
                                         <img src="https://img.icons8.com/fluency-systems-filled/20/000000/life-cycle-female.png"/>
-                                    </button>
-                                    <x-admin-user-modal user="{{$user->id}}"/>
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#a{{$user->id}}">
-                                        <img src="https://img.icons8.com/ios-glyphs/20/000000/activity.png"/>
-                                    </button>
-                                    <x-admin-user-activity-modal user="{{$user->id}}"></x-admin-user-activity-modal>
+                                    </a>
                                     @if ($user->banned == 0)
                                         <a class="btn btn-success" href="{{route('admin.user.ban', ['id' => $user->id])}}">
                                             <img src="https://img.icons8.com/windows/20/000000/remove-user-male--v1.png"/>
@@ -150,29 +145,6 @@
                     },
                     success: (data) => {
                         $('#nav-books').html(data)
-                    },
-                })
-            })
-            $('.save-user').click(function () {
-                let target = $(this).data('save-button');
-                let id = $('.user-id[data-id="'+ target + '"]').data('id')
-                let name = $('.name[data-name="'+ target + '"]').val() === '' ? $('.name[data-name="'+ target + '"]').attr('placeholder') : $('.name[data-name="'+ target + '"]').val();
-                let email = $('.email[data-email="'+ target + '"]').val() === '' ? $('.email[data-email="'+ target + '"]').attr('placeholder') : $('.email[data-email="'+ target + '"]').val();
-                let role = $('.form-select[data-select="'+ target + '"]').val();
-                $.ajax({
-                    url: "{{route('admin.user.update')}}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: "POST",
-                    data: {
-                        id: id,
-                        name: name,
-                        email: email,
-                        role: role,
-                    },
-                    success: (data) => {
-                        location.reload()
                     },
                 })
             })
