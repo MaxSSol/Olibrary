@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,7 +45,24 @@ Route::name('auth.')->group(function() {
         '/registration',
         '\App\Http\Controllers\RegistrationController@index'
     )->name('registration');
-    Route::post('/registration', '\App\Http\Controllers\RegistrationController@save');
+    Route::post('/registration', '\App\Http\Controllers\RegistrationController@store');
+});
+
+Route::group(['prefix' => 'email'], function () {
+    Route::get('/verify', function () {
+        return view('auth.verify-email');
+    })->middleware('auth')->name('verification.notice');
+
+    Route::get('/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect('/account');
+    })->middleware(['auth', 'signed'])->name('verification.verify');
+
+    Route::post('/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('message', 'Verification link sent!');
+    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 });
 
 Route::middleware('auth')->name('account.')->group(function () {

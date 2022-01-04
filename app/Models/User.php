@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -22,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+    ];
+
+    protected $attributes = [
+        'banned' => 0,
     ];
 
     /**

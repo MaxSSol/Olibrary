@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
@@ -14,28 +17,21 @@ class RegistrationController extends Controller
         if (Auth::check()) {
             return redirect(route('account.account'));
         }
-        return view('authentication.registration');
+        $role = Role::where('slug', 'user')->value('id');
+        return view('authentication.registration', ['role' => $role]);
     }
-    public function save(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|email|unique:users,email',
-            'name' => 'required|min:3|max:8|unique:users,name',
-            'password' => [
-                'required',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-            ]
-        ]);
-        $user = User::create($validated);
+        $user = User::create($request->all());
+
+        $user->roles()->attach($request->role);
+
+        event(new Registered($user));
 
         if ($user) {
             Auth::login($user);
             return redirect(route('account.account'));
         }
-        return redirect(route('auth.registration'))->withErrors($validated)->withInput();
+        return redirect(route('auth.registration'))->withErrors($request)->withInput();
     }
 }
