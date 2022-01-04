@@ -84,8 +84,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
        ->name('dashboard');
 
    //user
-
-   Route::post('/user/update', '\App\Http\Controllers\UserController@update')
+   Route::get('/user/edit/{id}', '\App\Http\Controllers\UserController@edit')
+       ->name('user.edit');
+   Route::post('/user/update/{id}', '\App\Http\Controllers\UserController@update')
        ->name('user.update');
    Route::get('/user/ban', '\App\Http\Controllers\UserController@ban')
        ->name('user.ban');

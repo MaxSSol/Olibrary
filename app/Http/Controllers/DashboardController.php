@@ -13,9 +13,8 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $users = User::whereNotIn('id', [$request->user()->id])->get();
-        $books = Books::with(['authors'])->get();
+        $books = Books::all();
         $authors = Author::all();
-        $roles = Role::all();
-        return view('admin.dashboard', compact('users', 'books', 'authors', 'roles'));
+        return view('admin.dashboard', compact('users', 'books', 'authors'));
     }
 }

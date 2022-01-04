@@ -2,26 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function update(Request $request)
+    public function edit($id)
     {
-        if ($request->ajax()) {
-            $user = User::findOrFail($request->post('id'));
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        return view('admin.user-update', compact('user', 'roles'));
+    }
+    public function update(UpdateUserRequest $request, $id)
+    {
+            $user = User::findOrFail($id);
             $this->authorize('update', $user);
-            $user->name = $request->post('name');
-            $user->email = $request->post('email');
-            $user->save();
-            if ($request->post('role')) {
-                $user->roles()->detach();
-                $role = Role::findOrFail($request->post('role'));
-                $role->users()->save($user);
-            }
-        }
+            $userData = collect($request->only(['email','name','password']))->whereNotNull()->toArray();
+            $user->update($userData);
+            $user->roles()->detach();
+            $user->roles()->attach($request->role);
+
+            return redirect(route('admin.user.edit', $id));
     }
 
     public function ban(Request $request)
