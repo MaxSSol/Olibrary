@@ -14,6 +14,7 @@
 <main class="form-signin">
     <form action="{{route('auth.registration')}}" method="POST">
         @csrf
+        <input type="hidden" value="{{$role}}" name="role">
         <h1 class="h3 mb-4 fw-normal">Please sign up</h1>
         <div class="form-floating mb-2">
             <input type="email" class="form-control" id="floatingEmail" placeholder="info@olibrary.com" name="email" value="{{ old('email') }}">
