@@ -99,7 +99,6 @@
                             <th scope="col">#</th>
                             <th scope="col">First name</th>
                             <th scope="col">Last name</th>
-                            <th scope="col">Count books</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
@@ -109,7 +108,6 @@
                                 <th scope="row">{{$loop->iteration}}</th>
                                 <td>{{$author->first_name}}</td>
                                 <td>{{$author->last_name}}</td>
-                                <td>{{$author->books()->count()}}</td>
                                 <td>
                                     <a class="btn btn-primary" href="{{route('admin.author.edit', $author)}}">
                                         <img src="https://img.icons8.com/ios-filled/20/000000/update-left-rotation.png"/>
