@@ -31,17 +31,27 @@
                 </button>
             </div>
         </section>
-        <section class="book-detail d-flex justify-content-between">
-            <div class="book-info mt-3">
-                <p class="book-title h1">{{$book->title}}</p>
-                <p class="book-description-title pt-2 fw-bold">Description:</p>
-                <p class="book-description fs-5" style="text-align: justify">
-                    {{$book->description}}
-                </p>
-            </div>
-            <div class="book-info-download ms-4 mt-3 text-center">
-                <img src="https://s3.amazonaws.com/loa-production-23ffs35gui41a/volumes/images/000/000/068/ecommerce/9780940450660.jpg?1446054155"/>
-                <button type="button" class="mt-3 btn btn-lg bg-danger">Download</button>
+        <section class="book-detail">
+            <div class="row">
+                <div class="col">
+                    <div class="book-info mt-3">
+                        <p class="book-title h1">{{$book->title}}</p>
+                        <p class="book-description-title pt-2 fw-bold">Description:</p>
+                        <p class="book-description fs-5" style="text-align: justify">
+                            {{$book->description}}
+                        </p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="book-info-download ms-4 mt-3 d-flex justify-content-center">
+                        <img class="h-25" src="https://s3.amazonaws.com/loa-production-23ffs35gui41a/volumes/images/000/000/068/ecommerce/9780940450660.jpg?1446054155"/>
+                    </div>
+                    <div class="btn-download d-flex justify-content-center">
+                        <a type="button" class="mt-3 btn btn-lg bg-success" href="{{route('books.download', $book)}}">
+                            <span class="fw-light">Download</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -50,7 +60,7 @@
 @push('scripts')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 @endpush
-@section('scripts')
+@section('body-scripts')
     <script>
         $(document).ready(function () {
             $('.btn-add-to-favorite').click(function () {

@@ -4,6 +4,13 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property mixed $title
+ * @property mixed $description
+ * @property mixed $bookFile
+ * @property mixed $authors
+ */
+
 class UpdateBookRequest extends FormRequest
 {
     /**
@@ -26,7 +33,7 @@ class UpdateBookRequest extends FormRequest
         return [
             'title' => 'required|max:255',
             'description' => 'required|max:65550',
-            'bookFile' => 'file|size:1024',
+            'bookFile' => 'max:1024',
             'authors' => 'required|array',
         ];
     }

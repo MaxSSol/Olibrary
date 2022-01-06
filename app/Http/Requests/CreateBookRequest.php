@@ -4,6 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property mixed $title
+ * @property mixed $description
+ * @property mixed $bookFile
+ * @property mixed $authors
+ */
 class CreateBookRequest extends FormRequest
 {
     /**

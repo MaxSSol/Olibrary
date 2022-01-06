@@ -24,7 +24,7 @@ Route::get('/categories', '\App\Http\Controllers\CategoryController@index')
 Route::name('books.')->group(function() {
     Route::get('/books', '\App\Http\Controllers\BookController@index')
         ->name('books');
-    Route::get('/book/{id}', '\App\Http\Controllers\BookController@show')
+    Route::get('/book/show/{id}', '\App\Http\Controllers\BookController@show')
         ->name('show')
         ->middleware('auth');
     Route::get('/favorite', '\App\Http\Controllers\FavoriteController@addToFavorite')
@@ -32,6 +32,9 @@ Route::name('books.')->group(function() {
         ->middleware('auth');
     Route::get('/remove-favorite', '\App\Http\Controllers\FavoriteController@removeFromFavorite')
         ->name('remove.favorite')
+        ->middleware('auth');
+    Route::get('/book/download/{id}', '\App\Http\Controllers\BookDownloadController@download')
+        ->name('download')
         ->middleware('auth');
 });
 

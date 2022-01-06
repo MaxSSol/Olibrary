@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static filter(\App\Filters\BookFilter $filters)
+ * @method static findOrFail($id)
+ */
 class Books extends Model
 {
     use HasFactory;
@@ -16,7 +20,7 @@ class Books extends Model
     protected $fillable = [
         'title',
         'description',
-        'path_file'
+        'file_name',
     ];
 
     public function authors()
