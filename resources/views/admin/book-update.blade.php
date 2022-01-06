@@ -42,7 +42,7 @@
                             name="title"/>
                     </div>
                     <div class="my-3">
-                        <p class="fw-bold">File: {{$book->path_file}}</p>
+                        <p class="fw-bold">File: {{$book->file_name}}</p>
                         <label for="formFile" class="form-label">Update file</label>
                         <input class="form-control" type="file" id="formFile" name="bookFile">
                     </div>

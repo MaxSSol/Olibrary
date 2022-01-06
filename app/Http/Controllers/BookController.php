@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Filters\BookFilter;
-use App\Http\Requests\AdminBookRequest;
-use App\Http\Requests\CreateAuthorRequest;
 use App\Http\Requests\CreateBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Author;
@@ -36,15 +34,15 @@ class BookController extends Controller
     public function update(UpdateBookRequest $request, $id)
     {
         $book = Books::findOrFail($id);
-        $book->fill([
+        if ($request->bookFile !== null) {
+            Storage::delete('/books/files/' . $book->file_name);
+            $request->file('bookFile')->storeAs('/books/files', $request->bookFile->getClientOriginalName());
+        }
+        $book->update([
             'title' => $request->title,
             'description' => $request->description,
-            'path_file' => $request->bookFile !== null ? $request->bookFile->getClientOriginalName() : $book->path_file,
+            'file_name' => $request->bookFile !== null ? $request->bookFile->getClientOriginalName() : $book->file_name,
         ]);
-        $book->save();
-        if ($request->bookFile !== null) {
-            $request->bookFile->storeAs('Books', $book->path_file);
-        }
         $book->authors()->detach();
         $book->authors()->attach($request->authors);
         return redirect(route('admin.book.update', $book));
@@ -68,9 +66,9 @@ class BookController extends Controller
         $book = Books::create([
             'title' => $request->title,
             'description' => $request->description,
-            'path_file' => $request->bookFile->getClientOriginalName(),
+            'file_name' => $request->bookFile->getClientOriginalName(),
         ]);
-        Storage::disk('local')->put($book->path_file, 'Books');
+        $request->file('bookFile')->storeAs('/books/files', $request->bookFile->getClientOriginalName());
         $book->authors()->attach($request->authors);
         return redirect(route('admin.dashboard'));
     }
