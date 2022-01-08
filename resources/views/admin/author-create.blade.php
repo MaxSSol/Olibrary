@@ -7,12 +7,18 @@
 @endpush
 
 @section('styles')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 @endsection
 
 @section('content')
     <x-header/>
     <main>
+        <div class="back-button">
+            <a class="btn fw-bold" href="{{\Illuminate\Support\Facades\URL::previous()}}">
+                <img src="https://img.icons8.com/material-outlined/20/000000/left.png"/>
+                Back
+            </a>
+        </div>
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -91,7 +97,7 @@
 
 @section('body-scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.select-author').select2();
         });
     </script>

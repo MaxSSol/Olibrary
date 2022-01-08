@@ -7,10 +7,10 @@
     <main>
         <section class="page-subheader d-flex align-items-center justify-content-between border-bottom">
             <div class="back-button">
-                <button class="btn fw-bold">
+                <a class="btn fw-bold" href="{{\Illuminate\Support\Facades\URL::previous()}}">
                     <img src="https://img.icons8.com/material-outlined/20/000000/left.png"/>
                     Back
-                </button>
+                </a>
             </div>
             <div class="share-buttons">
                 <button class="btn fw-bold btn-favorite" style="{{$favorite ? '' : 'display:none'}}" data-book="{{$book->id}}">
