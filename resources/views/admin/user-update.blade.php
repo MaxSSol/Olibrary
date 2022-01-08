@@ -5,6 +5,12 @@
 @section('content')
     <x-header/>
     <main>
+        <div class="back-button">
+            <a class="btn fw-bold" href="{{\Illuminate\Support\Facades\URL::previous()}}">
+                <img src="https://img.icons8.com/material-outlined/20/000000/left.png"/>
+                Back
+            </a>
+        </div>
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>

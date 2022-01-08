@@ -13,8 +13,8 @@
 @section('content')
     <x-header/>
     <main>
-        <div class="back-button d-flex justify-content-start">
-            <a class="btn fw-bold" href="{{route('admin.dashboard')}}">
+        <div class="back-button">
+            <a class="btn fw-bold" href="{{\Illuminate\Support\Facades\URL::previous()}}">
                 <img src="https://img.icons8.com/material-outlined/20/000000/left.png"/>
                 Back
             </a>
