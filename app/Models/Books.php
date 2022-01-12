@@ -21,6 +21,7 @@ class Books extends Model
         'title',
         'description',
         'file_name',
+        'image_name',
     ];
 
     public function authors()

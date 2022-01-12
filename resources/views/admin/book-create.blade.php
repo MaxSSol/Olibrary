@@ -51,6 +51,10 @@
                             <label for="formFile" class="form-label">File</label>
                             <input class="form-control" type="file" id="formFile" name="bookFile">
                         </div>
+                        <div class="my-3">
+                            <label for="formImage" class="form-label">Image</label>
+                            <input class="form-control" type="file" id="formImage" name="bookImage">
+                        </div>
                         <div class="update-book-author">
                             <span class="input-group-text" id="book-author">Author</span>
                             <select
