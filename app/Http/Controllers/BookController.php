@@ -34,15 +34,21 @@ class BookController extends Controller
     public function update(UpdateBookRequest $request, $id)
     {
         $book = Books::findOrFail($id);
-        if ($request->bookFile !== null) {
-            Storage::delete('/books/files/' . $book->file_name);
-            $request->file('bookFile')->storeAs('/books/files', $request->bookFile->getClientOriginalName());
+        if ($request->hasFile('bookFile')) {
+            Storage::delete('public/books/files/' . $book->file_name);
+            $request
+                ->file('bookFile')
+                ->storeAs('public/books/files', $request->bookFile->getClientOriginalName());
+            $request['file_name'] = $request->bookFile->getClientOriginalName();
         }
-        $book->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'file_name' => $request->bookFile !== null ? $request->bookFile->getClientOriginalName() : $book->file_name,
-        ]);
+        if ($request->hasFile('bookImage')) {
+            Storage::delete('public/books/images/' . $book->image_name);
+            $request
+                ->file('bookImage')
+                ->storeAs('public/books/images', $request->bookImage->getClientOriginalName());
+            $request['image_name'] = $request->bookImage->getClientOriginalName();
+        }
+        $book->update($request->all());
         $book->authors()->detach();
         $book->authors()->attach($request->authors);
         return redirect(route('admin.book.update', $book));
@@ -63,12 +69,11 @@ class BookController extends Controller
 
     public function store(CreateBookRequest $request)
     {
-        $book = Books::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'file_name' => $request->bookFile->getClientOriginalName(),
-        ]);
-        $request->file('bookFile')->storeAs('/books/files', $request->bookFile->getClientOriginalName());
+        $request['file_name'] = $request->bookFile->getClientOriginalName();
+        $request['image_name'] = $request->bookImage->getClientOriginalName();
+        $book = Books::create($request->all());
+        $request->file('bookFile')->storeAs('public/books/files', $request->bookFile->getClientOriginalName());
+        $request->file('bookImage')->storeAs('public/books/images', $request->bookImage->getClientOriginalName());
         $book->authors()->attach($request->authors);
         return redirect(route('admin.dashboard'));
     }

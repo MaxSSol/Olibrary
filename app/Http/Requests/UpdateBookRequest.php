@@ -34,6 +34,7 @@ class UpdateBookRequest extends FormRequest
             'title' => 'required|max:255',
             'description' => 'required|max:65550',
             'bookFile' => 'max:1024',
+            'bookImage' => 'max:1024|mimes:jpg,bmp,png,jpeg',
             'authors' => 'required|array',
         ];
     }

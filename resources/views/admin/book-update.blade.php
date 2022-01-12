@@ -52,6 +52,11 @@
                         <label for="formFile" class="form-label">Update file</label>
                         <input class="form-control" type="file" id="formFile" name="bookFile">
                     </div>
+                    <div class="my-3">
+                        <p class="fw-bold">Image: {{$book->image_name}}</p>
+                        <label for="formImage" class="form-label">Image file</label>
+                        <input class="form-control" type="file" id="formImage" name="bookImage">
+                    </div>
                     <div class="update-book-author">
                         <span class="input-group-text" id="book-author">Author</span>
                         <select

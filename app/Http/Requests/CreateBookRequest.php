@@ -33,6 +33,7 @@ class CreateBookRequest extends FormRequest
             'title' => 'required|max:255|unique:books',
             'description' => 'required|max:65550',
             'bookFile' => 'required|file|max:10240',
+            'bookImage' => 'file|max:10240|mimes:jpg,bmp,png,jpeg',
             'authors' => 'required|array',
         ];
     }

@@ -44,7 +44,7 @@
                 </div>
                 <div class="col">
                     <div class="book-info-download ms-4 mt-3 d-flex justify-content-center">
-                        <img class="h-25" src="https://s3.amazonaws.com/loa-production-23ffs35gui41a/volumes/images/000/000/068/ecommerce/9780940450660.jpg?1446054155"/>
+                        <img class="h-25" src="{{ asset('storage/books/images/' . $book->image_name) }}"/>
                     </div>
                     <div class="btn-download d-flex justify-content-center">
                         <a type="button" class="mt-3 btn btn-lg bg-success" href="{{route('books.download', $book)}}">
