@@ -33,6 +33,8 @@
             </label>
             <button class="w-100 btn btn-primary btn-lg mb-2" type="submit">Sign in</button>
             <a href="{{route('auth.registration')}}">Don`t have account? Sign up</a>
+            <br/>
+            <a href="{{route('password.request')}}">Forgot password?</a>
         </div>
     </form>
 </main>

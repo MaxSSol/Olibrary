@@ -1,8 +1,12 @@
 <?php
 
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +25,7 @@ Route::get('/', '\App\Http\Controllers\MainController@index')
 Route::get('/categories', '\App\Http\Controllers\CategoryController@index')
     ->name('categories');
 
-Route::name('books.')->group(function() {
+Route::name('books.')->group(function () {
     Route::get('/books', '\App\Http\Controllers\BookController@index')
         ->name('books');
     Route::get('/book/show/{id}', '\App\Http\Controllers\BookController@show')
@@ -38,7 +42,7 @@ Route::name('books.')->group(function() {
         ->middleware('auth');
 });
 
-Route::name('auth.')->group(function() {
+Route::name('auth.')->group(function () {
     Route::get('/login', '\App\Http\Controllers\LoginController@index')
         ->name('login');
     Route::post('/login', '\App\Http\Controllers\LoginController@login');
@@ -49,6 +53,50 @@ Route::name('auth.')->group(function() {
         '\App\Http\Controllers\RegistrationController@index'
     )->name('registration');
     Route::post('/registration', '\App\Http\Controllers\RegistrationController@store');
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('/forgot-password', function () {
+        return view('authentication.forgot-password');
+    })->name('password.request');
+    Route::post('/forgot-password', function (Request $request) {
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with(['status' => __($status)])
+            : back()->withErrors(['email' => __($status)]);
+    })->name('password.email');
+    Route::get('/reset-password/{token}', function ($token) {
+        return view('authentication.reset-password', ['token' => $token]);
+    })->middleware('guest')->name('password.reset');
+    Route::post('/reset-password', function (Request $request) {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => $password
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('auth.login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
+    })->name('password.update');
 });
 
 Route::group(['prefix' => 'email'], function () {
@@ -82,44 +130,44 @@ Route::middleware('auth')->name('account.')->group(function () {
 });
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-   Route::get('/dashboard', '\App\Http\Controllers\DashboardController@index')
-       ->can('dashboard')
-       ->name('dashboard');
+    Route::get('/dashboard', '\App\Http\Controllers\DashboardController@index')
+        ->can('dashboard')
+        ->name('dashboard');
 
-   //user
-   Route::get('/user/edit/{id}', '\App\Http\Controllers\UserController@edit')
-       ->name('user.edit');
-   Route::post('/user/update/{id}', '\App\Http\Controllers\UserController@update')
-       ->name('user.update');
-   Route::get('/user/ban', '\App\Http\Controllers\UserController@ban')
-       ->name('user.ban');
-   Route::get('/user/unban', '\App\Http\Controllers\UserController@unban')
-       ->name('user.unban');
+    //user
+    Route::get('/user/edit/{id}', '\App\Http\Controllers\UserController@edit')
+        ->name('user.edit');
+    Route::post('/user/update/{id}', '\App\Http\Controllers\UserController@update')
+        ->name('user.update');
+    Route::get('/user/ban', '\App\Http\Controllers\UserController@ban')
+        ->name('user.ban');
+    Route::get('/user/unban', '\App\Http\Controllers\UserController@unban')
+        ->name('user.unban');
 
-   //books
+    //books
 
-   Route::get('/book/create', '\App\Http\Controllers\BookController@create')
-       ->name('book.create');
-   Route::post('/book/create', '\App\Http\Controllers\BookController@store')
-       ->name('book.store');
-   Route::get('/book/update/{id}', '\App\Http\Controllers\BookController@edit')
-       ->name('book.edit');
-   Route::post('/book/update/{id}', '\App\Http\Controllers\BookController@update')
-       ->name('book.update');
-   Route::post('/book/delete', '\App\Http\Controllers\BookController@destroy')
-       ->name('book.delete');
+    Route::get('/book/create', '\App\Http\Controllers\BookController@create')
+        ->name('book.create');
+    Route::post('/book/create', '\App\Http\Controllers\BookController@store')
+        ->name('book.store');
+    Route::get('/book/update/{id}', '\App\Http\Controllers\BookController@edit')
+        ->name('book.edit');
+    Route::post('/book/update/{id}', '\App\Http\Controllers\BookController@update')
+        ->name('book.update');
+    Route::post('/book/delete', '\App\Http\Controllers\BookController@destroy')
+        ->name('book.delete');
 
-   //authors
+    //authors
 
-   Route::get('/author/create', '\App\Http\Controllers\AuthorController@create')
-       ->name('author.create');
-   Route::post('/author/create', '\App\Http\Controllers\AuthorController@store')
-       ->name('author.store');
-   Route::get('/author/update/{id}', '\App\Http\Controllers\AuthorController@edit')
-       ->name('author.edit');
-   Route::post('/author/update/{id}', '\App\Http\Controllers\AuthorController@update')
-       ->name('author.update');
-   Route::get('/author/delete/{id}', '\App\Http\Controllers\AuthorController@delete')
-       ->name('author.delete');
+    Route::get('/author/create', '\App\Http\Controllers\AuthorController@create')
+        ->name('author.create');
+    Route::post('/author/create', '\App\Http\Controllers\AuthorController@store')
+        ->name('author.store');
+    Route::get('/author/update/{id}', '\App\Http\Controllers\AuthorController@edit')
+        ->name('author.edit');
+    Route::post('/author/update/{id}', '\App\Http\Controllers\AuthorController@update')
+        ->name('author.update');
+    Route::get('/author/delete/{id}', '\App\Http\Controllers\AuthorController@delete')
+        ->name('author.delete');
 });
 
