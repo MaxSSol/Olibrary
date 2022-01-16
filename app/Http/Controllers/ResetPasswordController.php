@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
 {
-    /**
-     * @return \Illuminate\Contracts\Foundation\Application |\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
     public function show()
     {
         return view('authentication.forgot-password');
@@ -34,11 +33,32 @@ class ResetPasswordController extends Controller
 
     public function edit($token)
     {
-        return view('authentication.reset-password', compact($token));
+        return view('authentication.reset-password', ['token' => $token]);
     }
 
     public function update(Request $request)
     {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
 
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => $password
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('auth.login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
 }
