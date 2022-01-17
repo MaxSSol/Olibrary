@@ -6,12 +6,14 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        Gate::authorize('edit-user', $user);
         $roles = Role::all();
         return view('admin.user-update', compact('user', 'roles'));
     }
@@ -36,6 +38,9 @@ class UserController extends Controller
         return redirect(route('admin.dashboard'));
     }
 
+    /**
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function unban(Request $request)
     {
         $user = User::findOrFail($request->get('id'));
