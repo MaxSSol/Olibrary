@@ -98,10 +98,10 @@ Route::middleware('auth')->name('account.')->group(function () {
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/dashboard', '\App\Http\Controllers\DashboardController@index')
-        ->can('dashboard')
         ->name('dashboard');
 
     //user
+
     Route::get('/user/edit/{id}', '\App\Http\Controllers\UserController@edit')
         ->name('user.edit');
     Route::post('/user/update/{id}', '\App\Http\Controllers\UserController@update')

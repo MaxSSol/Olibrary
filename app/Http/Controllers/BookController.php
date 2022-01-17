@@ -9,6 +9,8 @@ use App\Models\Author;
 use App\Models\Books;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
@@ -33,7 +35,9 @@ class BookController extends Controller
 
     public function update(UpdateBookRequest $request, $id)
     {
+        $this->authorize('update', $request->user());
         $book = Books::findOrFail($id);
+        $this->authorize('update', $book);
         if ($request->hasFile('bookFile')) {
             Storage::delete('public/books/files/' . $book->file_name);
             $request
@@ -57,6 +61,7 @@ class BookController extends Controller
     public function edit($id)
     {
         $book = Books::with('authors')->findOrFail($id);
+        Gate::authorize('edit-book');
         $authors = Author::all();
         return view('admin.book-update', ['book' => $book, 'authors' => $authors]);
     }
@@ -64,11 +69,13 @@ class BookController extends Controller
     public function create()
     {
         $authors = Author::all();
+        Gate::authorize('create-book');
         return view('admin.book-create', ['authors' => $authors]);
     }
 
     public function store(CreateBookRequest $request)
     {
+        $this->authorize('create', $request->user());
         $request['file_name'] = $request->bookFile->getClientOriginalName();
         $request['image_name'] = $request->bookImage->getClientOriginalName();
         $book = Books::create($request->all());

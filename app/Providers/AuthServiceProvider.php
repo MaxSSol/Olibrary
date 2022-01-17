@@ -28,14 +28,12 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Gate::define(
-            'dashboard',
-            function (User $user) {
-                return ($user->isAdmin() || $user->isModer()) === true ?
-                    Response::allow() :
-                    Response::deny();
-            }
-        );
-
+        Gate::define('dashboard', fn(User $user) => $user->isAdmin() || $user->isModer());
+        Gate::define('edit-user', fn(User $user) => $user->isAdmin() || $user->isModer());
+        Gate::define('edit-book', fn(User $user) => $user->isAdmin() || $user->isModer());
+        Gate::define('edit-book', fn(User $user) => $user->isAdmin() || $user->isModer());
+        Gate::define('create-book', fn(User $user) => $user->isAdmin() || $user->isModer());
+        Gate::define('edit-author', fn(User $user) => $user->isAdmin() || $user->isModer());
+        Gate::define('create-author', fn(User $user) => $user->isAdmin() || $user->isModer());
     }
 }
