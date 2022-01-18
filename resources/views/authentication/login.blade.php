@@ -36,6 +36,16 @@
             <br/>
             <a href="{{route('password.request')}}">Forgot password?</a>
         </div>
+        <div class="form-google d-flex justify-content-end">
+            <div class="form-google-title me-3">
+                <p>Login with:</p>
+            </div>
+            <div class="google-button">
+                <a href="{{route('auth.google')}}">
+                    <img src="https://img.icons8.com/fluency/25/000000/google-logo.png"/>
+                </a>
+            </div>
+        </div>
     </form>
 </main>
 @endsection
