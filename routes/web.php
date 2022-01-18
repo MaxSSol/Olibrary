@@ -53,6 +53,10 @@ Route::name('auth.')->group(function () {
         '\App\Http\Controllers\RegistrationController@index'
     )->name('registration');
     Route::post('/registration', '\App\Http\Controllers\RegistrationController@store');
+    Route::get('/auth/google', '\App\Http\Controllers\LoginController@googleRedirect')
+        ->name('google');
+    Route::get('/auth/google/callback', '\App\Http\Controllers\LoginController@loginWithGoogle')
+        ->name('login.google');
 });
 
 Route::middleware('guest')->group(function () {
