@@ -12,14 +12,39 @@
                 <div class="profile-email">
                     <p class="fw-normal">
                         <img
-                            src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/15/000000/external-email-interface-kiranshastry-lineal-kiranshastry.png"
+                            src="https://img.icons8.com/external-kiranshastry-solid-kiranshastry/25/000000/external-email-business-kiranshastry-solid-kiranshastry.png"
                             alt="Email"/>
                         Email:
                         {{$user->email}}</p>
                 </div>
+                <div class="profile-joined">
                 <p class="fw-normal">
-                    <img src="https://img.icons8.com/ios-filled/20/000000/clock--v2.png" alt="Joined"/>
+                    <img src="https://img.icons8.com/ios-filled/25/000000/clock--v2.png" alt="Joined"/>
                     Joined: {{$user->created_at}}</p>
+                </div>
+                <div class="profile-email-verify d-flex">
+                    @if(!$user->email_verified_at)
+                        <p class="fw-normal me-2">
+                            <span>
+                                <img
+                                    src="https://img.icons8.com/external-kiranshastry-solid-kiranshastry/25/000000/external-email-cyber-security-kiranshastry-solid-kiranshastry-3.png"
+                                    alt="email-verify"
+                                />
+                            </span>
+                            Verify email:
+                        </p>
+                        <a href="{{route('verification.notice')}}">verify email</a>
+                    @else
+                        <p class="fw-normal">
+                            <span>
+                                <img
+                                    src="https://img.icons8.com/external-kiranshastry-solid-kiranshastry/20/000000/external-email-business-kiranshastry-solid-kiranshastry.png"
+                                    alt="Email"/>
+                            </span>
+                            Verify email: <span class="fw-bold">verified</span>
+                        </p>
+                    @endif
+                </div>
             </div>
             <div class="profile-information-change">
                 <a class="btn btn-primary" href="{{route('account.settings')}}">

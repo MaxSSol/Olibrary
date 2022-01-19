@@ -39,7 +39,7 @@ Route::name('books.')->group(function () {
         ->middleware('auth');
     Route::get('/book/download/{id}', '\App\Http\Controllers\BookDownloadController@download')
         ->name('download')
-        ->middleware('auth');
+        ->middleware(['auth','verified']);
 });
 
 Route::name('auth.')->group(function () {
@@ -71,20 +71,17 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::group(['prefix' => 'email'], function () {
-    Route::get('/verify', function () {
-        return view('auth.verify-email');
-    })->middleware('auth')->name('verification.notice');
+    Route::get('/verify', '\App\Http\Controllers\VerifyEmailController@index')
+        ->middleware('auth')
+        ->name('verification.notice');
 
-    Route::get('/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-        return redirect('/account');
-    })->middleware(['auth', 'signed'])->name('verification.verify');
+    Route::get('/verify/{id}/{hash}', '\App\Http\Controllers\VerifyEmailController@verifyEmail')
+        ->middleware(['auth', 'signed'])
+        ->name('verification.verify');
 
-    Route::post('/verification-notification', function (Request $request) {
-        $request->user()->sendEmailVerificationNotification();
-
-        return back()->with('message', 'Verification link sent!');
-    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    Route::post('/verification-notification', '\App\Http\Controllers\VerifyEmailController@sendEmail')
+        ->middleware(['auth', 'throttle:6,1'])
+        ->name('verification.send');
 });
 
 Route::middleware('auth')->name('account.')->group(function () {
