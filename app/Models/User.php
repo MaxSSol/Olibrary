@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\QueuedVerifyEmailJob;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -84,5 +85,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isModer()
     {
         return $this->roles()->where('slug', 'moder')->exists();
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        QueuedVerifyEmailJob::dispatch($this);
     }
 }
