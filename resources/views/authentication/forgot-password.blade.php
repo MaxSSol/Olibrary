@@ -14,6 +14,7 @@
     <main class="form-forgot-password">
         @if(\Illuminate\Support\Facades\Session::has('status'))
             <h1 class="h3 mb-4 fw-normal">{{Session::get('status')}}</h1>
+            <a class="btn btn-success" href="{{route('home')}}">Go to main page</a>
         @else
         <form method="POST" action="{{route('password.email')}}">
             @csrf

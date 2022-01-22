@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -18,17 +20,20 @@ class ResetPasswordController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function sendEmail(Request $request)
+    public function sendEmail(Request $request, PasswordBroker $password)
     {
         $request->validate(['email' => 'required|email']);
+        $user = User::where('email', $request->only('email'))->first();
+        $status = '';
+        if ($user) {
+            $token = $password->createToken($user);
+            $user->sendPasswordResetNotification($token);
+            $status = 'Password reset link sent';
+        }
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        return $status === Password::RESET_LINK_SENT
+        return $status === 'Password reset link sent'
             ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+            : back()->withErrors(['email' => 'Check your email']);
     }
 
     public function edit($token)
