@@ -8,9 +8,9 @@ actor: AcceptanceTester
 modules:
   enabled:
     - WebDriver:
-        url: 'http://192.168.0.106:8081/'
+        url: 'http://your-url/'
         browser: chrome
-        host: 192.168.0.106
+        host: host
         port: 4444
     - Laravel:
         part: ORM
