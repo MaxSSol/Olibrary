@@ -38,7 +38,7 @@
             <label for="floatingPassword">Password</label>
         </div>
         <div class="checkbox">
-            <button class="w-100 btn btn-primary btn-lg mb-2" type="submit">Sign in</button>
+            <button class="w-100 btn btn-primary btn-lg mb-2" id="sign-in" type="submit">Sign in</button>
             <a href="{{route('auth.login')}}">Have account? Sign in</a>
         </div>
     </form>
