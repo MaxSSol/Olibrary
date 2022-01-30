@@ -23,4 +23,21 @@ class FunctionalTester extends \Codeception\Actor
     /**
      * Define custom actions here
      */
+
+    public function login(string $email, string $password)
+    {
+        $I = $this;
+        $I->amOnPage('/login');
+        $I->fillField(['name' => 'email'], $email);
+        $I->fillField(['name' => 'password'], $password);
+        $I->click('#submit-sign');
+    }
+
+    public function getUserByRole(string $slugRole)
+    {
+        $I = $this;
+        $role = $I->grabRecord('App\Models\Role', ['slug' => $slugRole]);
+        $userRole = $I->grabRecord('users_roles', ['role_id' => $role->id]);
+        return $I->grabRecord('App\Models\User', ['id' => $userRole['user_id']]);
+    }
 }
