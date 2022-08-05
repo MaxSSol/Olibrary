@@ -7,6 +7,7 @@ use App\Http\Requests\CreateBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Author;
 use App\Models\Book;
+use App\Services\BookService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
+    protected BookService $bookService;
+
+    public function __construct(BookService $bookService)
+    {
+        $this->bookService = $bookService;
+    }
+
     public function index(Request $request, BookFilter $filters)
     {
         $books = Book::filter($filters)->paginate(15);
@@ -39,17 +47,11 @@ class BookController extends Controller
         $book = Book::findOrFail($id);
         $this->authorize('update', $book);
         if ($request->hasFile('bookFile')) {
-            Storage::delete('public/books/files/' . $book->file_name);
-            $request
-                ->file('bookFile')
-                ->storeAs('public/books/files', $request->bookFile->getClientOriginalName());
+            $this->bookService->uploadBook($book, $request);
             $request['file_name'] = $request->bookFile->getClientOriginalName();
         }
         if ($request->hasFile('bookImage')) {
-            Storage::delete('public/books/images/' . $book->image_name);
-            $request
-                ->file('bookImage')
-                ->storeAs('public/books/images', $request->bookImage->getClientOriginalName());
+            $this->bookService->uploadImage($book, $request);
             $request['image_name'] = $request->bookImage->getClientOriginalName();
         }
         $book->update($request->all());
