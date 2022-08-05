@@ -1,6 +1,6 @@
 @extends('layouts.light')
 
-@section('title', 'Library Books')
+@section('title', 'Library Book')
 
 @section('content')
     <x-header/>

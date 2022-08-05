@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.0"
 
 services:
     nginx:
@@ -8,7 +8,7 @@ services:
         ports:
             - 8081:80
         links:
-            -   fpm
+            - fpm
         volumes:
             - ./:/var/www/Olibrary
     fpm:
@@ -18,11 +18,14 @@ services:
         volumes:
             - ./:/var/www/Olibrary
         links:
-            -   mysql
+            - mysql
     mysql:
-        image: mysql:5.7
+        image: 'mysql/mysql-server:8.0'
         ports:
-            -   33061:3306
+            - '${FORWARD_DB_PORT:-33061}:3306'
         environment:
-            - MYSQL_ROOT_PASSWORD=
-            - MYSQL_DATABASE=
+                MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+                MYSQL_DATABASE: '${DB_DATABASE}'
+                MYSQL_USER: '${DB_USERNAME}'
+                MYSQL_PASSWORD: '${DB_PASSWORD}'
+                MYSQL_ALLOW_EMPTY_PASSWORD: 1

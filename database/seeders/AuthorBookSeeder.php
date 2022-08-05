@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Author;
-use App\Models\Books;
+use App\Models\Book;
 use Illuminate\Database\Seeder;
 
 class AuthorBookSeeder extends Seeder
@@ -15,7 +15,7 @@ class AuthorBookSeeder extends Seeder
      */
     public function run()
     {
-        $books = Books::all();
+        $books = Book::all();
         $authors = Author::all();
         $authors->each(function ($author) use ($books) {
             $author->books()->attach(

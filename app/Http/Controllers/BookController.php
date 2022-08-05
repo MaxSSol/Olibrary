@@ -6,7 +6,7 @@ use App\Filters\BookFilter;
 use App\Http\Requests\CreateBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Author;
-use App\Models\Books;
+use App\Models\Book;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +17,7 @@ class BookController extends Controller
 {
     public function index(Request $request, BookFilter $filters)
     {
-        $books = Books::filter($filters)->paginate(15);
+        $books = Book::filter($filters)->paginate(15);
         if ($request->ajax()) {
             return view('books.ajaxBooks', ['books' => $books])->render();
         }
@@ -26,7 +26,7 @@ class BookController extends Controller
 
     public function show($id)
     {
-        $book = Books::findOrFail($id);
+        $book = Book::findOrFail($id);
         $favorite = \request()->user()->favorites()->where(function (Builder $query) use ($id) {
             return $query->where('book_id', $id);
         })->exists();
@@ -36,7 +36,7 @@ class BookController extends Controller
     public function update(UpdateBookRequest $request, $id)
     {
         $this->authorize('update', $request->user());
-        $book = Books::findOrFail($id);
+        $book = Book::findOrFail($id);
         $this->authorize('update', $book);
         if ($request->hasFile('bookFile')) {
             Storage::delete('public/books/files/' . $book->file_name);
@@ -60,7 +60,7 @@ class BookController extends Controller
 
     public function edit($id)
     {
-        $book = Books::with('authors')->findOrFail($id);
+        $book = Book::with('authors')->findOrFail($id);
         Gate::authorize('edit-book');
         $authors = Author::all();
         return view('admin.book-update', ['book' => $book, 'authors' => $authors]);
@@ -78,7 +78,7 @@ class BookController extends Controller
         $this->authorize('create', $request->user());
         $request['file_name'] = $request->bookFile->getClientOriginalName();
         $request['image_name'] = $request->bookImage->getClientOriginalName();
-        $book = Books::create($request->all());
+        $book = Book::create($request->all());
         $request->file('bookFile')->storeAs('public/books/files', $request->bookFile->getClientOriginalName());
         $request->file('bookImage')->storeAs('public/books/images', $request->bookImage->getClientOriginalName());
         $book->authors()->attach($request->authors);
@@ -87,7 +87,7 @@ class BookController extends Controller
 
     public function destroy(Request $request)
     {
-        $book = Books::findOrFail($request->post('id'))->delete();
-        return view('admin.books-ajax', ['books' => Books::all()])->render();
+        $book = Book::findOrFail($request->post('id'))->delete();
+        return view('admin.books-ajax', ['books' => Book::all()])->render();
     }
 }

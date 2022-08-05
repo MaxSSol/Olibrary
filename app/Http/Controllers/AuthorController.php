@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
-use App\Models\Books;
-use Illuminate\Http\Request;
+use App\Models\Book;
 use App\Models\Author;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class AuthorController extends Controller
@@ -15,14 +13,14 @@ class AuthorController extends Controller
     public function create()
     {
         Gate::authorize('create-author');
-        return view('admin.author-create', ['books' => Books::all()]);
+        return view('admin.author-create', ['books' => Book::all()]);
     }
 
     public function edit($id)
     {
         Gate::authorize('edit-author');
         $author = Author::with('books')->findOrFail($id);
-        $books = Books::all();
+        $books = Book::all();
         return view('admin.author-update', ['author' => $author, 'books' => $books]);
     }
 
