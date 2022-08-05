@@ -22,7 +22,7 @@ class RegistrationController extends Controller
     }
     public function store(StoreUserRequest $request)
     {
-        $user = User::create($request->all());
+        $user = User::create($request->validated());
 
         $user->roles()->attach($request->role);
 

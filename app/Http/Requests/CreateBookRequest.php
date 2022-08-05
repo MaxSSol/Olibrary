@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property mixed $title
@@ -19,7 +20,7 @@ class CreateBookRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->isAdmin() || $this->user()->isModer();
+        return Auth::user()->isAdmin() || Auth::user()->isModer();
     }
 
     /**
