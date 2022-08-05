@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static filter(\App\Filters\BookFilter $filters)
  * @method static findOrFail($id)
  */
-class Books extends Model
+class Book extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -36,7 +36,7 @@ class Books extends Model
     public function categories()
     {
         return $this->belongsToMany(
-            Categories::class,
+            Category::class,
             'category_book',
             'book_id',
             'category_id'

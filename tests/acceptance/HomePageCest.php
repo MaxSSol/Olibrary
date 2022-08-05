@@ -16,8 +16,8 @@ class HomePageCest
     public function tryToTestViewMenuButtons(AcceptanceTester $I)
     {
         $I->see('Home');
-        $I->see('Categories');
-        $I->see('Books');
+        $I->see('Category');
+        $I->see('Book');
         $I->see( 'About us');
     }
 

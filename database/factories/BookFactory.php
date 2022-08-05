@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class BooksFactory extends Factory
+class BookFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -16,7 +16,8 @@ class BooksFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'description' => $this->faker->realText,
-            'path_file' => $this->faker->filePath(),
+            'file_name' => $this->faker->filePath(),
+            'image_name' => $this->faker->image()
         ];
     }
 }
